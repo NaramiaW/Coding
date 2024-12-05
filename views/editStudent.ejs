@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Student - Coding Kids</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <nav>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/">Logout</a>
+    </nav>
+    </header>
+  <div class="kelas">
+    <form action="/editStudent/<%= student._id %>" method="POST">
+        <h2>Edit Student</h2>
+        <div class="form-group">
+          <label for="codingClass">Coding Class:</label>
+          <select name="codingClass" required>
+            <option value="Ya" <%= student.codingClass === 'Ya' ? 'selected' : '' %>>Ya</option>
+            <option value="Tidak" <%= student.codingClass === 'Tidak' ? 'selected' : '' %>>Tidak</option>
+          </select>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" value="<%= student.name %>" required>
+        
+        </div><br>
+
+        <div class="form-group">
+          <label for="school">School:</label>
+          <input type="text" id="school" name="school" value="<%= student.school %>" required>
+        
+        </div><br>
+
+        <div class="form-group">
+          <label for="grade">Grade:</label>
+          <input type="number" id="grade" name="grade" value="<%= student.grade %>" required>
+        
+        </div><br>
+
+        <div class="form-group">
+          <label for="science">Science Score:</label>
+          <input type="number" id="science" name="science" value="<%= student.science %>" required>
+        
+        </div><br>
+
+        <div class="form-group">
+          <label for="tech">Technology Score:</label> 
+          <input type="number" id="tech" name="tech" value="<%= student.tech %>" required>
+        
+        </div><br>
+
+        <div class="form-group">
+          <label for="math">Math Score:</label>
+          <input type="number" id="math" name="math" value="<%= student.math %>" required>
+        </div><br>
+        <button type="submit">Save Changes</button>
+    </form>
+  </div>
+  <footer>
+    &copy; 2024 Our Education Platform. All rights reserved.
+</footer>
+</body>
+</html>

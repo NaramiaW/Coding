@@ -1,0 +1,385 @@
+// Script menampilkan grafik
+<script>
+        async function fetchStemData() {
+            try {
+                const response = await fetch('/api/stem-data');
+                const data = await response.json();
+
+                function generateStudentLabels(dataArray) {
+                    return dataArray.map((_, index) => `Siswa ${index + 1}`);
+                }
+        
+                // Ekstraksi data untuk setiap grafik
+                const scienceLabels1to3 = generateStudentLabels(data.codingScience1to3);
+                const scienceCoding1to3 = data.codingScience1to3.map(student => student.science);
+                const scienceNonCoding1to3 = data.nonCodingScience1to3.map(student => student.science);
+        
+                const techCoding1to3 = data.codingTech1to3.map(student => student.tech);
+                const techNonCoding1to3 = data.nonCodingTech1to3.map(student => student.tech);
+        
+                const mathCoding1to3 = data.codingMath1to3.map(student => student.math);
+                const mathNonCoding1to3 = data.nonCodingMath1to3.map(student => student.math);
+        
+                const scienceLabels4to6 = generateStudentLabels(data.nonCodingScience4to6);
+                const scienceCoding4to6 = data.codingScience4to6.map(student => student.science);
+                const scienceNonCoding4to6 = data.nonCodingScience4to6.map(student => student.science);
+        
+                const techCoding4to6 = data.codingTech4to6.map(student => student.tech);
+                const techNonCoding4to6 = data.nonCodingTech4to6.map(student => student.tech);
+        
+                const mathCoding4to6 = data.codingMath4to6.map(student => student.math);
+                const mathNonCoding4to6 = data.nonCodingMath4to6.map(student => student.math);
+        
+                
+                // Fungsi untuk membuat grafik
+                function createChart(id, labels, codingData, nonCodingData, title) {
+                    const ctx = document.getElementById(id).getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                { label: 'Coding', data: codingData, borderColor: 'blue', fill: false },
+                                { label: 'Non-Coding', data: nonCodingData, borderColor: 'red', fill: false }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                title: { display: true, text: title }
+                            },
+                            scales: {
+                                x: {
+                                    title: { display: true, text: 'Siswa' }, // Label sumbu-X sebagai 'Siswa'
+                                    ticks: {
+                                        maxRotation: 45, // Rotasi teks jika terlalu panjang
+                                        minRotation: 0
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 20,
+                                    },
+                                    title: { display: true, text: 'Nilai' } // Label sumbu-Y
+                                }
+                            }
+                        }
+                    });
+                }
+                
+                // Render 6 grafik
+                createChart('scienceChart1to3', scienceLabels1to3, scienceCoding1to3, scienceNonCoding1to3, 'Science Kelas 1-3');
+                createChart('techChart1to3', scienceLabels1to3, techCoding1to3, techNonCoding1to3, 'Technology Kelas 1-3');
+                createChart('mathChart1to3', scienceLabels1to3, mathCoding1to3, mathNonCoding1to3, 'Math Kelas 1-3');
+                createChart('scienceChart4to6', scienceLabels4to6, scienceCoding4to6, scienceNonCoding4to6, 'Science Kelas 4-6');
+                createChart('techChart4to6', scienceLabels4to6, techCoding4to6, techNonCoding4to6, 'Technology Kelas 4-6');
+                createChart('mathChart4to6', scienceLabels4to6, mathCoding4to6, mathNonCoding4to6, 'Math Kelas 4-6');
+            } catch (error) {
+                console.error('Error fetching STEM data:', error);
+            }
+        }
+        
+        fetchStemData();
+        
+    </script>
+
+
+    <div class="container">
+    <h2>Hasil Perhitungan Statistik</h2>
+    <p><strong>Ftabel:</strong> <%= Ftabel %></p>
+    <p><strong>F0h1:</strong> <%= F0h1 %></p>
+    <p><strong>F0h2:</strong> <%= F0h2 %></p>
+    <p><strong>F0h3:</strong> <%= F0h3 %></p>
+</div>
+
+        <div class="grid-container">
+           <!-- <div class="chart-container"></div> -->
+            <canvas id="scienceChart1to3"></canvas>
+            <canvas id="techChart1to3"></canvas>
+            <canvas id="mathChart1to3"></canvas>
+            <canvas id="scienceChart4to6"></canvas>
+            <canvas id="techChart4to6"></canvas>
+            <canvas id="mathChart4to6"></canvas>
+        
+    </div>
+
+
+
+
+    CHART BATANG
+    async function fetchStemData() {
+            try {
+                const response = await fetch('/api/stem-data');
+                const data = await response.json();
+        
+                // Fungsi untuk mengelompokkan nilai dan menghitung jumlah siswa yang mendapat nilai tersebut
+                function countStudentValues(dataArray, subject) {
+                    const valueCounts = {};
+                    dataArray.forEach(student => {
+                        const value = student[subject]; // Mengambil nilai pelajaran (science, tech, math)
+                        if (valueCounts[value]) {
+                            valueCounts[value] += 1; // Tambahkan jika nilai sudah ada di object
+                        } else {
+                            valueCounts[value] = 1; // Inisialisasi jika nilai belum ada
+                        }
+                    });
+                    const sortedValues = Object.keys(valueCounts).sort((a, b) => a - b); // Urutkan nilai
+                    const counts = sortedValues.map(value => valueCounts[value]); // Ambil jumlah siswa untuk setiap nilai
+                    return { labels: sortedValues, counts: counts };
+                }
+        
+                // Ekstraksi dan pengelompokan data untuk setiap grafik
+                const science1to3 = countStudentValues(data.codingScience1to3, 'science');
+                const scienceCoding1to3 = science1to3.counts;
+                const scienceLabels1to3 = science1to3.labels;
+        
+                const scienceNonCoding1to3 = countStudentValues(data.nonCodingScience1to3, 'science').counts;
+                
+                const tech1to3 = countStudentValues(data.codingTech1to3, 'tech');
+                const techCoding1to3 = tech1to3.counts;
+                const techLabels1to3 = tech1to3.labels;
+        
+                const techNonCoding1to3 = countStudentValues(data.nonCodingTech1to3, 'tech').counts;
+                
+                const math1to3 = countStudentValues(data.codingMath1to3, 'math');
+                const mathCoding1to3 = math1to3.counts;
+                const mathLabels1to3 = math1to3.labels;
+        
+                const mathNonCoding1to3 = countStudentValues(data.nonCodingMath1to3, 'math').counts;
+        
+                const science4to6 = countStudentValues(data.codingScience4to6, 'science');
+                const scienceCoding4to6 = science4to6.counts;
+                const scienceLabels4to6 = science4to6.labels;
+        
+                const scienceNonCoding4to6 = countStudentValues(data.nonCodingScience4to6, 'science').counts;
+                
+                const tech4to6 = countStudentValues(data.codingTech4to6, 'tech');
+                const techCoding4to6 = tech4to6.counts;
+                const techLabels4to6 = tech4to6.labels;
+        
+                const techNonCoding4to6 = countStudentValues(data.nonCodingTech4to6, 'tech').counts;
+        
+                const math4to6 = countStudentValues(data.codingMath4to6, 'math');
+                const mathCoding4to6 = math4to6.counts;
+                const mathLabels4to6 = math4to6.labels;
+        
+                const mathNonCoding4to6 = countStudentValues(data.nonCodingMath4to6, 'math').counts;
+        
+                // Fungsi untuk membuat grafik
+                function createChart(id, labels, codingData, nonCodingData, title) {
+                    const ctx = document.getElementById(id).getContext('2d');
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels, // Menggunakan nilai yang sudah diurutkan
+                            datasets: [
+                                { label: 'Coding', data: codingData,backgroundColor: 'rgba(75, 192, 192, 0.2)'},
+                                { label: 'Non-Coding', data: nonCodingData,backgroundColor: 'rgba(255, 159, 64, 0.2)'}
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                title: { display: true, text: title }
+                            },
+                            scales: {
+                                x: {
+                                    title: { display: true, text: 'Nilai' }, // Sumbu X adalah nilai
+                                    ticks: {
+                                        maxRotation: 45, // Rotasi teks jika terlalu panjang
+                                        minRotation: 0
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    title: { display: true, text: 'Jumlah Siswa' } // Sumbu Y adalah jumlah siswa
+                                }
+                            }
+                        }
+                    });
+                }
+        
+                // Render 6 grafik
+                createChart('scienceChart1to3', scienceLabels1to3, scienceCoding1to3, scienceNonCoding1to3, 'Science Kelas 1-3');
+                createChart('techChart1to3', techLabels1to3, techCoding1to3, techNonCoding1to3, 'Technology Kelas 1-3');
+                createChart('mathChart1to3', mathLabels1to3, mathCoding1to3, mathNonCoding1to3, 'Math Kelas 1-3');
+                createChart('scienceChart4to6', scienceLabels4to6, scienceCoding4to6, scienceNonCoding4to6, 'Science Kelas 4-6');
+                createChart('techChart4to6', techLabels4to6, techCoding4to6, techNonCoding4to6, 'Technology Kelas 4-6');
+                createChart('mathChart4to6', mathLabels4to6, mathCoding4to6, mathNonCoding4to6, 'Math Kelas 4-6');
+            } catch (error) {
+                console.error('Error fetching STEM data:', error);
+            }
+        }
+        
+        fetchStemData();
+
+
+        // HOW TO USE BRUNO (HAVEN'T TRY IT YET)
+
+INDEX.JS
+
+const express = require('express');
+const { User } = require('./Schema.js'); // Assuming User model is in Schema.js
+const app = express();
+const port = 3000;
+
+app.use(express.json()); // Parse JSON request bodies
+
+// Create a new user
+app.post('/api/users', async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    // Create a new user
+    const newUser = await User.create({ name, email, password });
+
+    res.status(201).json({
+      message: 'User created successfully',
+      user: newUser,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error creating user', error: error.message });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
+
+
+function displayStudents(students) {
+            const tbody = document.querySelector('#studentTable tbody');
+            tbody.innerHTML = ''; // Bersihkan data sebelumnya
+
+            students.forEach((member, index) => {
+                const row = `
+                    <tr>
+                        <td>Siswa ke - ${index + 1}</td>
+                        <td>${member.codingClass}</td>
+                        <td>${member.grade}</td>
+                        <td>${member.science}</td>
+                        <td>${member.tech}</td>
+                        <td>${member.math}</td>
+                        <td>
+                            <a href="/editStudent/${member._id}">
+                                <button>Edit</button>
+                            </a>
+                            <form action="/delete-student/${member._id}" method="POST" style="display:inline;">
+                                <button type="submit" onclick="return confirm('Are you sure you want to delete Siswa ke - ${index+1}?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+        // Panggil fetchSortedData saat halaman dimuat pertama kali
+    window.onload = fetchSortedData;
+
+    <h2>Manfaat/Kegunaan Website</h2>
+        <ul>
+            <li>Memberikan wawasan kepada orang tua dan pengajar tentang efektivitas kelas coding dalam 
+                meningkatkan nilai akademik.</li>
+            <li>Menyediakan data dan analisis nilai STeM siswa secara visual dan interaktif.</li>
+            <li>Mempermudah pemilik kursus coding untuk mengevaluasi program pembelajarannya.</li>
+        </ul>
+
+
+
+         <h2 style="color: black; display:flex; justify-content:center;">Perbandingan Grafik Nilai Coding dan Non-Coding</h2>
+            <div class="graph-container">
+                
+            <canvas id="scienceChart1to3"></canvas>
+            <canvas id="techChart1to3"></canvas>
+            <canvas id="mathChart1to3"></canvas>
+            <canvas id="scienceChart4to6"></canvas>
+            <canvas id="techChart4to6"></canvas>
+            <canvas id="mathChart4to6"></canvas>
+            <br><br><br>
+        </div>
+    <script>
+        async function fetchStemData() {
+            try {
+                const response = await fetch('/api/stem-data');
+                const data = await response.json();
+
+                function generateStudentLabels(dataArray) {
+                    return dataArray.map((_, index) => `Siswa ${index + 1}`);
+                }
+        
+                // Ekstraksi data untuk setiap grafik
+                const scienceLabels1to3 = generateStudentLabels(data.codingScience1to3);
+                const scienceCoding1to3 = data.codingScience1to3.map(student => student.science);
+                const scienceNonCoding1to3 = data.nonCodingScience1to3.map(student => student.science);
+        
+                const techCoding1to3 = data.codingTech1to3.map(student => student.tech);
+                const techNonCoding1to3 = data.nonCodingTech1to3.map(student => student.tech);
+        
+                const mathCoding1to3 = data.codingMath1to3.map(student => student.math);
+                const mathNonCoding1to3 = data.nonCodingMath1to3.map(student => student.math);
+        
+                const scienceLabels4to6 = generateStudentLabels(data.nonCodingScience4to6);
+                const scienceCoding4to6 = data.codingScience4to6.map(student => student.science);
+                const scienceNonCoding4to6 = data.nonCodingScience4to6.map(student => student.science);
+        
+                const techCoding4to6 = data.codingTech4to6.map(student => student.tech);
+                const techNonCoding4to6 = data.nonCodingTech4to6.map(student => student.tech);
+        
+                const mathCoding4to6 = data.codingMath4to6.map(student => student.math);
+                const mathNonCoding4to6 = data.nonCodingMath4to6.map(student => student.math);
+        
+                
+                // Fungsi untuk membuat grafik
+                function createChart(id, labels, codingData, nonCodingData, title) {
+                    const ctx = document.getElementById(id).getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                { label: 'Coding', data: codingData, borderColor: 'blue', fill: false },
+                                { label: 'Non-Coding', data: nonCodingData, borderColor: 'red', fill: false }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                title: { display: true, text: title }
+                            },
+                            scales: {
+                                x: {
+                                    title: { display: true, text: 'Siswa' }, // Label sumbu-X sebagai 'Siswa'
+                                    ticks: {
+                                        maxRotation: 45, // Rotasi teks jika terlalu panjang
+                                        minRotation: 0
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 20,
+                                    },
+                                    title: { display: true, text: 'Nilai' } // Label sumbu-Y
+                                }
+                            }
+                        }
+                    });
+                }
+                
+                // Render 6 grafik
+                createChart('scienceChart1to3', scienceLabels1to3, scienceCoding1to3, scienceNonCoding1to3, 'Science Kelas 1-3');
+                createChart('techChart1to3', scienceLabels1to3, techCoding1to3, techNonCoding1to3, 'Technology Kelas 1-3');
+                createChart('mathChart1to3', scienceLabels1to3, mathCoding1to3, mathNonCoding1to3, 'Math Kelas 1-3');
+                createChart('scienceChart4to6', scienceLabels4to6, scienceCoding4to6, scienceNonCoding4to6, 'Science Kelas 4-6');
+                createChart('techChart4to6', scienceLabels4to6, techCoding4to6, techNonCoding4to6, 'Technology Kelas 4-6');
+                createChart('mathChart4to6', scienceLabels4to6, mathCoding4to6, mathNonCoding4to6, 'Math Kelas 4-6');
+            } catch (error) {
+                console.error('Error fetching STEM data:', error);
+            }
+        }
+        
+        fetchStemData();
+        
+        
+    </script>

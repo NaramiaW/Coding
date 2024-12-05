@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Our Education Platform</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/analisis">Analisis</a>
+            <a href="/">Log out</a>
+            <a href="/help">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-diamond" viewBox="0 0 16 16">
+                    <path d="M6.95.435c.58-.58 1.52-.58 2.1 0l6.515 6.516c.58.58.58 1.519 0 2.098L9.05 15.565c-.58.58-1.519.58-2.098 0L.435 9.05a1.48 1.48 0 0 1 0-2.098zm1.4.7a.495.495 0 0 0-.7 0L1.134 7.65a.495.495 0 0 0 0 .7l6.516 6.516a.495.495 0 0 0 .7 0l6.516-6.516a.495.495 0 0 0 0-.7L8.35 1.134z"/>
+                    <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/>
+                </svg>
+            </a>
+        </nav>
+        
+    </header>
+    <main>
+        <h1>Hasil analisis perbandingan</h1>
+        <div class="container" >
+            <section class="analysis">
+                <p>
+                    Berdasarkan hasil analisis menggunakan <strong>MANOVA Two-Ways</strong> 
+                    yang telah teruji oleh uji statistik <strong>Pillai's Trace</strong>, 
+                    terbukti bahwa terdapat perbedaan signifikan antara siswa yang mengikuti 
+                    kelas coding dan yang tidak, dengan melihat nilai <strong>Science (Ilmu
+                    Pengetahuan Alam), Technology (Komputer),</strong> dan <strong>Math 
+                    (Matematika)</strong> yang dikenal sebagai STeM. 
+                    Uji ini memastikan bahwa program coding memberikan dampak nyata terhadap 
+                    prestasi akademik siswa di bidang STeM. Pillai's Trace adalah salah satu dari 
+                    beberapa statistik yang digunakan dalam MANOVA (Multivariate Analysis of Variance). 
+                    Uji ini digunakan untuk menguji hipotesis mengenai perbedaan antara grup-grup dalam 
+                    variabel dependen yang bersifat multivariate (lebih dari satu variabel dependen).
+                </p>
+                
+                <div class="stats-section">
+                    <div class="stat-column">
+                      <!-- <h3>F-h1: <%= F0h1 %></h3>
+                      <h3>Uji Statistik Pillai-1: <%= Pillai1 %></h3> -->
+                      <p>F-h1 adalah nilai distribusi F perbandingan antara anak yang mengikuti
+                        kelas coding dengan yang tidak. <br>
+                        Pillai-1 adalah nilai distribusi Pillai's Trace perbandingan antara anak
+                        yang mengikuti kelas coding dengan yang tidak.
+                      </p>
+                      <p><%= h_group %></p> 
+                      <p><%= uji_group %></p>
+                    </div>
+                    
+                    <div class="stat-column">
+                      <!-- <h3>F-h2: <%= F0h2 %></h3>
+                      <h3>Uji Statistik Pillai-2: <%= Pillai2 %></h3> -->
+                      <p>F-h2 adalah nilai distribusi F perbandingan antara anak kelas 1-3 dan kelas 4-6. <br>
+                        Pillai-2 adalah nilai distribusi Pillai's Trace perbandingan antara anak kelas 1-3 dan kelas 4-6.
+                      </p>
+                      <p><%= h_grade %></p> 
+                      <p><%= uji_grade %></p>
+                    </div>
+                    
+                    <div class="stat-column">
+                      <!-- <h3>F-h3: <%= F0h3 %></h3>
+                      <h3>Uji Statistik Pillai-3: <%= Pillai3 %></h3> -->
+                      <p>F-h3 adalah nilai distribusi F perbandingan antara anak yang mengikuti
+                        kelas coding dengan yang tidak pada kelas 1-3 dan kelas 4-6. <br>
+                        Pillai-3 adalah nilai distribusi Pillai's Trace perbandingan antara anak
+                        yang mengikuti kelas coding dengan yang tidak pada kelas 1-3 dan kelas 4-6..
+                      </p>
+                      <p><%= h_h3 %></p> 
+                      <p><%= uji_h3 %></p>
+                    </div>
+                  </div>
+                  
+                <h2 style="color: black;">Perbandingan Grafik Nilai Coding dan Non-Coding</h2>
+                
+            <div class="graph-container">
+                
+            <canvas id="scienceChart1to3"></canvas>
+            <canvas id="techChart1to3"></canvas>
+            <canvas id="mathChart1to3"></canvas>
+            <canvas id="scienceChart4to6"></canvas>
+            <canvas id="techChart4to6"></canvas>
+            <canvas id="mathChart4to6"></canvas>
+            <br><br><br>
+        </div>
+            </section>
+    
+        </div>
+    
+        
+    </main>
+    <footer>
+        &copy; 2024 Our Education Platform. All rights reserved.
+    </footer>
+    <script>
+        async function fetchStemData() {
+            try {
+                const response = await fetch('/api/stem-data');
+                const data = await response.json();
+
+                function generateStudentLabels(dataArray) {
+                    return dataArray.map((_, index) => `Siswa ${index + 1}`);
+                }
+        
+                // Ekstraksi data untuk setiap grafik
+                const scienceLabels1to3 = generateStudentLabels(data.codingScience1to3);
+                const scienceCoding1to3 = data.codingScience1to3.map(student => student.science);
+                const scienceNonCoding1to3 = data.nonCodingScience1to3.map(student => student.science);
+        
+                const techCoding1to3 = data.codingTech1to3.map(student => student.tech);
+                const techNonCoding1to3 = data.nonCodingTech1to3.map(student => student.tech);
+        
+                const mathCoding1to3 = data.codingMath1to3.map(student => student.math);
+                const mathNonCoding1to3 = data.nonCodingMath1to3.map(student => student.math);
+        
+                const scienceLabels4to6 = generateStudentLabels(data.nonCodingScience4to6);
+                const scienceCoding4to6 = data.codingScience4to6.map(student => student.science);
+                const scienceNonCoding4to6 = data.nonCodingScience4to6.map(student => student.science);
+        
+                const techCoding4to6 = data.codingTech4to6.map(student => student.tech);
+                const techNonCoding4to6 = data.nonCodingTech4to6.map(student => student.tech);
+        
+                const mathCoding4to6 = data.codingMath4to6.map(student => student.math);
+                const mathNonCoding4to6 = data.nonCodingMath4to6.map(student => student.math);
+        
+                
+                // Fungsi untuk membuat grafik
+                function createChart(id, labels, codingData, nonCodingData, title) {
+                    const ctx = document.getElementById(id).getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                { label: 'Coding', data: codingData, borderColor: 'blue', fill: false },
+                                { label: 'Non-Coding', data: nonCodingData, borderColor: 'red', fill: false }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                title: { display: true, text: title }
+                            },
+                            scales: {
+                                x: {
+                                    title: { display: true, text: 'Siswa' }, // Label sumbu-X sebagai 'Siswa'
+                                    ticks: {
+                                        maxRotation: 45, // Rotasi teks jika terlalu panjang
+                                        minRotation: 0
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 20,
+                                    },
+                                    title: { display: true, text: 'Nilai' } // Label sumbu-Y
+                                }
+                            }
+                        }
+                    });
+                }
+                
+                // Render 6 grafik
+                createChart('scienceChart1to3', scienceLabels1to3, scienceCoding1to3, scienceNonCoding1to3, 'Science Kelas 1-3');
+                createChart('techChart1to3', scienceLabels1to3, techCoding1to3, techNonCoding1to3, 'Technology Kelas 1-3');
+                createChart('mathChart1to3', scienceLabels1to3, mathCoding1to3, mathNonCoding1to3, 'Math Kelas 1-3');
+                createChart('scienceChart4to6', scienceLabels4to6, scienceCoding4to6, scienceNonCoding4to6, 'Science Kelas 4-6');
+                createChart('techChart4to6', scienceLabels4to6, techCoding4to6, techNonCoding4to6, 'Technology Kelas 4-6');
+                createChart('mathChart4to6', scienceLabels4to6, mathCoding4to6, mathNonCoding4to6, 'Math Kelas 4-6');
+            } catch (error) {
+                console.error('Error fetching STEM data:', error);
+            }
+        }
+        
+        fetchStemData();
+        
+    </script>
+</body>
+</html>

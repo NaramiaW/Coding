@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Student - Coding Kids</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <nav>
+        <a href="/dashboard">
+          Dashboard
+      </a>
+        <!-- <a href="/addStudent">Add New Student</a> -->
+        <a href="/">Logout</a>
+    </nav>
+    
+  </header>
+       
+  <div class="kelas">
+    <form action="/addStudent" method="POST">
+      <h2>Add New Student</h2>
+      <div class="form-group">
+        <label for="codingClass">Coding Class:</label>
+        <select name="codingClass" required>
+          <option value="Ya">Ya</option>
+          <option value="Tidak">Tidak</option>
+        </select>
+
+      </div><br>
+      <div class="form-group">
+        <label for="name">Name  :</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+        <br>
+        <div class="form-group">
+          <label for="school">School  :</label>
+        <input type="text" id="school" name="school"  required>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="grade">Grade  :</label>
+          <input type="number" id="grade" name="grade" min="1" max="6" required>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="science">Science Score  :</label>
+          <input type="number" id="science" name="science" min="0" max="100" required>
+        </div>
+        <br>
+        <div class="form-group">
+        <label for="tech">Technology Score  :</label>
+        <input type="number" id="tech" name="tech" min="0" max="100" required>
+        </div>
+        <br>
+        <div class="form-group">
+        <label for="math">Math Score  :</label>
+        <input type="number" id="math" name="math" min="0" max="100" required>
+        </div>
+        <br>
+        <button type="submit" onclick="return confirm('Are you sure all the data you input is correct?');">Add Student</button>
+    </form>
+  </div>
+  <footer>
+    &copy; 2024 Our Education Platform. All rights reserved.
+</footer>
+</body>
+</html>

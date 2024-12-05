@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/login">Log in</a>
+            
+        </nav>
+        
+    </header>
+    
+    <div class="kelas">
+        
+      <form action="/login" method="POST" id="admin-login-form">
+        <h2>Admin Login</h2>
+        <label for="email">Email:</label>
+        <input type="email" name="email" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" name="password" required>
+        <br>
+        <% if (typeof error !== 'undefined') { %>
+            <div style="color: red;">
+                <p><%= error %></p>
+            </div>
+        <% } %>
+        <button type="submit">Login</button>
+    </form>
+    </div>
+    
+</body>
+</html>
